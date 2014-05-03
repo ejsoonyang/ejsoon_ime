@@ -143,7 +143,6 @@ def select_or_input(event):
     ccIndex = event.scancode - 2
    elif 'KEY_BACKSPACE' == event.keycode and 1 == event.keystate:
     letters = letters[0:-1]
-    #print letters, '<--', match_cc(letters) 
     display_letter_cc(letters, match_cc(letters), event)
    else:
     newUI.write(ecodes.EV_KEY, event.scancode, event.keystate)
