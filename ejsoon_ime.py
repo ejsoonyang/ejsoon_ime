@@ -44,6 +44,8 @@ def switch_grab(event, inputMode):
  global maxKeyAppendHistory
  if inputMode > 0 and 0 == keyAppendHistory:
   dev.grab()
+  newUI.write(ecodes.EV_KEY, int(29 + (inputMode - 1 ) * 68), 0)
+  newUI.syn()
   print('---Start---')
   originalPaste = pyperclip.paste()
   maxKeyAppendHistory = 0
@@ -70,7 +72,6 @@ def input_cc(ccIndex, ccList, addLetter):
  global letters
  global inputMode
  global originalPaste
- global newUI
  if '' != addLetter:
   display_letter_cc(letters, ccList)
  if 2 == inputMode and 0 == ccIndex and [] == ccList:
