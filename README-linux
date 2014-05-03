@@ -16,7 +16,7 @@
 6,如果你的系統的剪貼板快捷鍵不是ctrl+v,那很抱歉本輸入法不適合你.
 7,衹能在linux運行本輸入法,需要安裝python3x,pyperclip,evdev,xclip.
 8,如果你發現運行不了,那可能是因為你系統的keyboard寫作Keyboard,請自行更改源碼解決!
-9,也有可能是xclip不能sudo運行,這時要su!
+9,要sudo運行,如果再不行,就su!
 10,在openSUSE和Ubuntu上做過測試,稍覺遺憾目前不支持windows.}
 
 今天5.2的更新:
