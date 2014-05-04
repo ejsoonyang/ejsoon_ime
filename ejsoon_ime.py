@@ -135,10 +135,10 @@ def switch_input_mode(event):
    inputMode = math.fabs(math.fabs(inputMode * 2 - 1) - 3)
    switch_grab(event, inputMode)
  elif 1 == maxKeyAppendHistory and 0 == event.keystate:
-  if 1 == keyList.count('KEY_LEFTALT'):
+  if 1 == keyList.count('KEY_LEFTALT') and 0 == isShift:
    isShift = 1
    print('---Input under terminal---')
-  elif 1 == keyList.count('KEY_RIGHTALT'):
+  elif 1 == keyList.count('KEY_RIGHTALT') and 1 == isShift:
    isShift = 0
    print('---Back to normal input---')
  if 0 == keyAppendHistory:
