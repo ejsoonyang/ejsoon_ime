@@ -5,7 +5,7 @@ import pyperclip
 
 devices = map(InputDevice, list_devices())
 for device in devices:
- if device.name.count('keyboard') > 0 or :
+ if device.name.count('keyboard') > 0 or \
     device.name.count('Keyboard') > 0:
   dev = InputDevice(device.fn)
 
@@ -99,13 +99,13 @@ def input_cc(ccIndex, ccList, addLetter):
    letters = ''
   if isFirst:
    dev.ungrab()
-  if isShift:
+  if isShift > 0:
    newUI.write(ecodes.EV_KEY, int(42 + (inputMode - 1 ) * 12), 1)
   newUI.write(ecodes.EV_KEY, int(29 + (inputMode - 1 ) * 68), 1)
   newUI.write(ecodes.EV_KEY, ecodes.KEY_V, 1)
   newUI.write(ecodes.EV_KEY, ecodes.KEY_V, 0)
   newUI.write(ecodes.EV_KEY, int(29 + (inputMode - 1 ) * 68), 0)
-  if isShift:
+  if isShift > 0:
    newUI.write(ecodes.EV_KEY, int(42 + (inputMode - 1 ) * 12), 0)
   if isFirst:
    isFirst = 0
@@ -136,10 +136,16 @@ def switch_input_mode(event):
    inputMode = math.fabs(math.fabs(inputMode * 2 - 1) - 3)
    switch_grab(event, inputMode)
  elif 1 == maxKeyAppendHistory and 0 == event.keystate:
-  if 1 == keyList.count('KEY_LEFTALT') and 0 == isShift:
-   isShift = 1
-   print('---Input under terminal---')
-  elif 1 == keyList.count('KEY_RIGHTALT') and 1 == isShift:
+  if 1 == keyList.count('KEY_LEFTALT') and isShift < 2:
+   isShift += 1
+   if 2 == isShift:
+    newUI.write(ecodes.EV_KEY, ecodes.KEY_I, 1)
+    newUI.write(ecodes.EV_KEY, ecodes.KEY_I, 0)
+    newUI.syn()
+    print('---Input under Vim---')
+   else:
+    print('---Input under terminal---')
+  elif 1 == keyList.count('KEY_RIGHTALT') and isShift > 0:
    isShift = 0
    print('---Back to normal input---')
  if 0 == keyAppendHistory:
