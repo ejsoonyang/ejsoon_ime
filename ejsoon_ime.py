@@ -5,7 +5,8 @@ import pyperclip
 
 devices = map(InputDevice, list_devices())
 for device in devices:
- if device.name.count('keyboard') > 0:
+ if device.name.count('keyboard') > 0 or :
+    device.name.count('Keyboard') > 0:
   dev = InputDevice(device.fn)
 
 keyList = []
