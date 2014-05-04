@@ -98,6 +98,8 @@ def input_cc(ccIndex, ccList, addLetter):
    pyperclip.copy(ccList[ccIndex])
    letters = ''
   if isFirst:
+   newUI.write(ecodes.EV_KEY, int(29 + (inputMode - 1 ) * 68), 0)
+   newUI.write(ecodes.EV_KEY, int(42 + (inputMode - 1 ) * 12), 0)
    dev.ungrab()
   if isShift > 0:
    newUI.write(ecodes.EV_KEY, int(42 + (inputMode - 1 ) * 12), 1)
