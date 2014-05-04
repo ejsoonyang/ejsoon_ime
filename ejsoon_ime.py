@@ -10,6 +10,7 @@ for device in devices:
 
 keyList = []
 inputMode = 0
+isShift = 0
 keyAppendHistory = 0
 maxKeyAppendHistory = 0
 letters = ''
@@ -39,12 +40,14 @@ def display_letter_cc(letters, ccList, event = None):
 
 def switch_grab(event, inputMode):
  global letters
+ global isShift
  global originalPaste
  global keyAppendHistory
  global maxKeyAppendHistory
  if inputMode > 0 and 0 == keyAppendHistory:
   dev.grab()
   newUI.write(ecodes.EV_KEY, int(29 + (inputMode - 1 ) * 68), 0)
+  newUI.write(ecodes.EV_KEY, int(42 + (inputMode - 1 ) * 12), 0)
   newUI.syn()
   print('---Start---')
   originalPaste = pyperclip.paste()
@@ -55,6 +58,7 @@ def switch_grab(event, inputMode):
   pyperclip.copy(originalPaste)
   maxKeyAppendHistory = 0
   letters = ''
+  isShift = 0
 
 def match_cc(letters):
  ccList = []
@@ -71,6 +75,7 @@ def match_cc(letters):
 def input_cc(ccIndex, ccList, addLetter):
  global letters
  global inputMode
+ global isShift
  global originalPaste
  if '' != addLetter:
   display_letter_cc(letters, ccList)
@@ -81,14 +86,24 @@ def input_cc(ccIndex, ccList, addLetter):
   print('Entry:  ' + ccList[ccIndex])
   letters = ''
   pyperclip.copy(ccList[ccIndex])
+  if isShift > 0:
+   if 1 == isShift:
+    dev.ungrab()
+   newUI.write(ecodes.EV_KEY, int(42 + (inputMode - 1 ) * 12), 1)
   newUI.write(ecodes.EV_KEY, int(29 + (inputMode - 1 ) * 68), 1)
   newUI.write(ecodes.EV_KEY, ecodes.KEY_V, 1)
   newUI.write(ecodes.EV_KEY, ecodes.KEY_V, 0)
   newUI.write(ecodes.EV_KEY, int(29 + (inputMode - 1 ) * 68), 0)
+  if isShift > 0:
+   if 1 == isShift:
+    isShift += 1
+    dev.grab()
+   newUI.write(ecodes.EV_KEY, int(42 + (inputMode - 1 ) * 12), 0)
   newUI.syn()
 
 def switch_input_mode(event):
  global inputMode
+ global isShift
  global keyAppendHistory
  global maxKeyAppendHistory
  global keyList
@@ -109,6 +124,11 @@ def switch_input_mode(event):
      1 == math.fabs(inputMode - 1):
    inputMode = math.fabs(math.fabs(inputMode * 2 - 1) - 3)
    switch_grab(event, inputMode)
+ elif 1 == maxKeyAppendHistory and 0 == event.keystate:
+  if 1 == keyList.count('KEY_LEFTALT'):
+   isShift = 1
+  elif 1 == keyList.count('KEY_RIGHTALT'):
+   isShift = 0
  if 0 == keyAppendHistory:
   keyList = []
 
