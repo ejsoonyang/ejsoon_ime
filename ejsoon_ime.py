@@ -162,7 +162,6 @@ def select_or_input(event):
   elif '' == letters:
    newUI.write(ecodes.EV_KEY, event.scancode, event.keystate)
    newUI.syn()
-   print('newUI.syn')
   elif '' != letters:
    if 'KEY_ESC' == event.keycode:
     letters = ''
