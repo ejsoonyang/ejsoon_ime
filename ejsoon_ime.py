@@ -135,8 +135,10 @@ def switch_input_mode(event):
  elif 1 == maxKeyAppendHistory and 0 == event.keystate:
   if 1 == keyList.count('KEY_LEFTALT'):
    isShift = 1
+   print('---Input under terminal---')
   elif 1 == keyList.count('KEY_RIGHTALT'):
    isShift = 0
+   print('---Back to normal input---')
  if 0 == keyAppendHistory:
   keyList = []
 
