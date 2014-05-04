@@ -31,7 +31,10 @@ def display_letter_cc(letters, ccList, event = None):
     'KEY_BACKSPACE' == event.keycode and 1 == event.keystate:
   sys.stdout.write('%-4s<-- ' %letters)
  else:
-  sys.stdout.write('%-8s' %letters)
+  if len(letters) < 7:
+   sys.stdout.write('%-8s' %letters)
+  else:
+   sys.stdout.write('%s' %letters)
  if [] != ccList:
   for ccListIndex in range(len(ccList)):
    sys.stdout.write(str(ccListIndex + 1) + \
@@ -83,9 +86,14 @@ def input_cc(ccIndex, ccList, addLetter):
   print('---Not match! Empty---')
   letters = ''
  elif ccIndex > -2 and ccIndex < len(ccList):
-  print('Entry:  ' + ccList[ccIndex])
-  letters = ''
-  pyperclip.copy(ccList[ccIndex])
+  if -1 == ccIndex:
+   print('Entry:  ' + letters)
+   pyperclip.copy(letters)
+   letters = ''
+  else:
+   print('Entry:  ' + ccList[ccIndex])
+   pyperclip.copy(ccList[ccIndex])
+   letters = ''
   if isShift > 0:
    if 1 == isShift:
     dev.ungrab()
@@ -147,19 +155,22 @@ def select_or_input(event):
  if inputMode > 0:
   addLetter = keycode_to_letter(event)
   if '' != addLetter:
-   if len(letters) < 5 and 1 == event.keystate:
+   if (len(letters) < 5 or 2 == inputMode) and 1 == event.keystate:
     letters += addLetter
    else:
     addLetter = ''
   elif '' == letters:
    newUI.write(ecodes.EV_KEY, event.scancode, event.keystate)
    newUI.syn()
+   print('newUI.syn')
   elif '' != letters:
    if 'KEY_ESC' == event.keycode:
     letters = ''
     print('---Empty---')
    elif 'KEY_SPACE' == event.keycode:
     ccIndex = 0
+   elif 'KEY_ENTER' == event.keycode and 2 == inputMode:
+    ccIndex = -1
    elif 1 == range(2, 12).count(event.scancode):
     ccIndex = event.scancode - 2
    elif 'KEY_BACKSPACE' == event.keycode and 1 == event.keystate:
