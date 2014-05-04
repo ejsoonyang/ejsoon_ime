@@ -11,6 +11,7 @@ for device in devices:
 keyList = []
 inputMode = 0
 isShift = 0
+isFirst = 1
 keyAppendHistory = 0
 maxKeyAppendHistory = 0
 letters = ''
@@ -44,17 +45,16 @@ def display_letter_cc(letters, ccList, event = None):
 def switch_grab(event, inputMode):
  global letters
  global isShift
+ global isFirst
  global originalPaste
  global keyAppendHistory
  global maxKeyAppendHistory
  if inputMode > 0 and 0 == keyAppendHistory:
   dev.grab()
-  newUI.write(ecodes.EV_KEY, int(29 + (inputMode - 1 ) * 68), 0)
-  newUI.write(ecodes.EV_KEY, int(42 + (inputMode - 1 ) * 12), 0)
-  newUI.syn()
   print('---Start---')
   originalPaste = pyperclip.paste()
   maxKeyAppendHistory = 0
+  isFirst = 1
  elif 0 == inputMode and 1 == event.keystate:
   dev.ungrab()
   print('---Suspend---')
@@ -62,6 +62,7 @@ def switch_grab(event, inputMode):
   maxKeyAppendHistory = 0
   letters = ''
   isShift = 0
+  isFirst = 0
 
 def match_cc(letters):
  ccList = []
@@ -79,6 +80,7 @@ def input_cc(ccIndex, ccList, addLetter):
  global letters
  global inputMode
  global isShift
+ global isFirst
  global originalPaste
  if '' != addLetter:
   display_letter_cc(letters, ccList)
@@ -94,19 +96,19 @@ def input_cc(ccIndex, ccList, addLetter):
    print('Entry:  ' + ccList[ccIndex])
    pyperclip.copy(ccList[ccIndex])
    letters = ''
-  if isShift > 0:
-   if 1 == isShift:
-    dev.ungrab()
+  if isFirst:
+   dev.ungrab()
+  if isShift:
    newUI.write(ecodes.EV_KEY, int(42 + (inputMode - 1 ) * 12), 1)
   newUI.write(ecodes.EV_KEY, int(29 + (inputMode - 1 ) * 68), 1)
   newUI.write(ecodes.EV_KEY, ecodes.KEY_V, 1)
   newUI.write(ecodes.EV_KEY, ecodes.KEY_V, 0)
   newUI.write(ecodes.EV_KEY, int(29 + (inputMode - 1 ) * 68), 0)
-  if isShift > 0:
-   if 1 == isShift:
-    isShift += 1
-    dev.grab()
+  if isShift:
    newUI.write(ecodes.EV_KEY, int(42 + (inputMode - 1 ) * 12), 0)
+  if isFirst:
+   isFirst = 0
+   dev.grab()
   newUI.syn()
 
 def switch_input_mode(event):
