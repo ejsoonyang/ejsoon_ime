@@ -39,6 +39,7 @@ for readLine in cinFile:
 cinFile.close()
 
 isShiftString = ['_', 's', 'i']
+
 def input_init(event):
  global isModeChange
  global inputStatus
