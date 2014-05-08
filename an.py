@@ -26,6 +26,8 @@ selectPage = 0
 inputStatus = -3
 newUI = UInput()
 
+#displayString = ''
+
 lArray = []
 ccArray = []
 cinFile = open('cj-ext.cin', 'r')
@@ -38,7 +40,28 @@ for readLine in cinFile:
   ccArray.append('　')
 cinFile.close()
 
+def match_cc(letters):
+ ccList = []
+ if '' != letters:
+  ccCount = lArray.count(letters)
+  cinIndex = 0
+  while (ccCount):
+   cinIndex += lArray[cinIndex:].index(letters)
+   ccList.append(ccArray[cinIndex])
+   cinIndex += 1
+   ccCount -= 1
+ return ccList
+
 isShiftString = ['_', 's', 'i']
+selectString = []
+for lowercase in range(97, 123):
+ if 'x' == chr(lowercase):
+  selectString.append(match_cc('toog')[0])
+ elif 'z' == chr(lowercase):
+  selectString.append(match_cc('hjwg')[0])
+ else:
+  selectString.append(match_cc(chr(lowercase))[0])
+
 def input_init(event):
  global isModeChange
  global inputStatus
@@ -46,6 +69,7 @@ def input_init(event):
  global addLetter
  global selectPage
  global ccIndex
+ #global displayString
  if 1 == math.fabs(inputStatus - 1):
   letters = ''
  if 2 != math.fabs(inputStatus + 1) or '' != addLetter or isModeChange > 0:
@@ -53,14 +77,17 @@ def input_init(event):
  isModeChange = 0
  inputStatus = -3
  ccIndex = -1
+ #displayString = ''
 
 def display(displayString):
+ #global displayString
  backSpaceCount = 36
  while backSpaceCount:
   sys.stdout.write('\b')
   backSpaceCount -= 1
  sys.stdout.write(displayString)
  sys.stdout.flush()
+ #displayString = ''
 
 def display_manage(event):
  global inputMode
@@ -69,6 +96,7 @@ def display_manage(event):
  global addletter
  global selectPage
  global inputStatus
+ #global displayString
  global isShift
  global isShiftString
  displayString = ''
@@ -79,19 +107,14 @@ def display_manage(event):
    displayLetters = ''
   else:
    displayLetters = letters
-  if len(displayLetters) > 0 and len(displayLetters) < 6:
-   for lettersIndex in range(0, len(displayLetters)):
-    if 'z' == letters[lettersIndex]:
-     displayString += match_cc('hjwg')[0]
-    elif 'x' == letters[lettersIndex]:
-     displayString += match_cc('toog')[0]
-    else:
-     displayString += match_cc(letters[lettersIndex])[0]
+  if len(displayLetters) > 0:
+   for letter in displayLetters:
+    displayString += selectString[letter]
   if 5 - len(displayLetters) > 0:
    for lettersIndex in range(0, 5 - len(displayLetters)):
     displayString += match_cc('zxaa')[0]
   displayString += '{'
-  if '' != displayLetters and len(displayLetters) < 6:
+  if '' != displayLetters:
    if len(match_cc(displayLetters)) > 4 * selectPage + 3:
     for ccIndex in range(4 * selectPage, 4 * selectPage + 4):
      displayString += str(ccIndex % 4 + 1) + '.' + \
@@ -103,8 +126,6 @@ def display_manage(event):
     for ccIndex in range(len(match_cc(displayLetters)), 4 * selectPage + 4):
      displayString += str(ccIndex % 4 + 1) + '.' + \
                       match_cc('zxaa')[0] + ' '
-  elif len(displayLetters) > 5:
-    displayString += '<' + displayLetters + '>'
   else:
    for ccIndex in range(0, 4):
     displayString += str(ccIndex % 4 + 1) + '.' + \
@@ -123,17 +144,6 @@ def keycode_to_letter(event):
   addLetter = event.keycode[-1].lower()
  return addLetter
 
-def match_cc(letters):
- ccList = []
- if '' != letters:
-  ccCount = lArray.count(letters)
-  cinIndex = 0
-  while (ccCount):
-   cinIndex += lArray[cinIndex:].index(letters)
-   ccList.append(ccArray[cinIndex])
-   cinIndex += 1
-   ccCount -= 1
- return ccList
 
 def input_cc():
  global letters
@@ -183,22 +193,20 @@ def input_manage(event):
    newUI.write(ecodes.EV_KEY, event.scancode, event.keystate)
    newUI.syn()
   elif '' != letters:
-   if 'KEY_ESC' == event.keycode and 1 == event.keystate:
+   if 'KEY_ESC' == event.keycode:
     letters = ''
     inputStatus = -2
-   elif 'KEY_BACKSPACE' == event.keycode:
-    if 1 == event.keystate:
-     letters = letters[0:-1]
-     inputStatus = -1
+   elif 'KEY_BACKSPACE' == event.keycode and 1 == event.keystate:
+    letters = letters[0:-1]
+    inputStatus = -1
    elif 'KEY_SPACE' == event.keycode:
-    if 1 == event.keystate:
-     ccIndex = 4 * selectPage
-     if len(match_cc(letters)) > ccIndex:
-      inputStatus = 0
-     else:
-      if 2 == inputMode:
-       letters = ''
-      ccIndex = -1
+    ccIndex = 4 * selectPage
+    if len(match_cc(letters)) > ccIndex:
+     inputStatus = 0
+    else:
+     if 2 == inputMode:
+      letters = ''
+     ccIndex = -1
    elif 1 == range(3, 6).count(event.scancode):
     ccIndex = event.scancode - 2 + 4 * selectPage
     if len(match_cc(letters)) > ccIndex:
