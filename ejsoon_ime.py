@@ -214,8 +214,9 @@ def input_manage(event):
      if 2 == event.scancode and selectPage > 0:
       selectPage -= 1
       inputStatus = 1
-   elif 'KEY_ENTER' == event.keycode and 2 == inputMode:
-    inputStatus = 2
+   elif 'KEY_ENTER' == event.keycode:
+    if 1 == event.keystate:
+     inputStatus = 2
    else:
     newUI.write(ecodes.EV_KEY, event.scancode, event.keystate)
     newUI.syn()
