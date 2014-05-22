@@ -260,6 +260,11 @@ def switch_input_mode(event):
   keyAppendHistory -= 1
  if 2 == maxKeyAppendHistory:
   if 1 == keyList.count('KEY_LEFTCTRL') and \
+     1 == keyList.count('KEY_RIGHTCTRL') and \
+     0 == inputMode:
+   display('')
+   sys.exit()
+  elif 1 == keyList.count('KEY_LEFTCTRL') and \
      1 == keyList.count('KEY_SPACE') and \
      1 == math.fabs(inputMode * 2 - 1):
    inputMode = math.fabs(inputMode - 1)
