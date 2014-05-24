@@ -12,6 +12,7 @@ inputMode = 0
 isModeChange = 0
 isFirst = 1
 isShift = 0
+isUpper = 0
 
 keyList = []
 keyAppendHistory = 0
@@ -43,14 +44,12 @@ isShiftString = ['_', 's', 'i']
 def input_init(event):
  global isModeChange
  global inputStatus
- global isShift
  global letters
  global addLetter
  global selectPage
  global ccIndex
  if 1 == math.fabs(inputStatus - 1):
   letters = ''
-  isShift = 0
  if 2 != math.fabs(inputStatus + 1) or '' != addLetter or isModeChange > 0:
   selectPage = 0
  isModeChange = 0
@@ -144,24 +143,26 @@ def input_cc():
  global inputStatus
  global isShift
  global isFirst
+ global isUpper
  global originalPaste
  if 0 == inputStatus:
   pyperclip.copy(match_cc(letters)[ccIndex])
  elif 2 == inputStatus:
-  if 1 == isShift:
+  if 1 == isUpper:
    letters = str.upper(letters)
+   isUpper = 0
   pyperclip.copy(letters)
  if isFirst > 0:
   newUI.write(ecodes.EV_KEY, int(29 + (inputMode - 1 ) * 68), 0)
   newUI.write(ecodes.EV_KEY, int(42 + (inputMode - 1 ) * 12), 0)
   dev.ungrab()
- if isShift > 0 and 2 != inputStatus:
+ if isShift > 0:
   newUI.write(ecodes.EV_KEY, int(42 + (inputMode - 1 ) * 12), 1)
  newUI.write(ecodes.EV_KEY, int(29 + (inputMode - 1 ) * 68), 1)
  newUI.write(ecodes.EV_KEY, ecodes.KEY_V, 1)
  newUI.write(ecodes.EV_KEY, ecodes.KEY_V, 0)
  newUI.write(ecodes.EV_KEY, int(29 + (inputMode - 1 ) * 68), 0)
- if isShift > 0 and 2 != inputStatus:
+ if isShift > 0:
   newUI.write(ecodes.EV_KEY, int(42 + (inputMode - 1 ) * 12), 0)
  if isFirst > 0:
   isFirst = 0
@@ -173,6 +174,7 @@ def input_manage(event):
  global inputStatus
  global isFirst
  global isShift
+ global isUpper
  global letters
  global addLetter
  global ccIndex
@@ -221,6 +223,9 @@ def input_manage(event):
    elif 'KEY_ENTER' == event.keycode:
     if 1 == event.keystate:
      inputStatus = 2
+   elif 'KEY_LEFTSHIFT' == event.keycode:
+    if 1 == event.keystate:
+     isUpper = 1
    else:
     newUI.write(ecodes.EV_KEY, event.scancode, event.keystate)
     newUI.syn()
