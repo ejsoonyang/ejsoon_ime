@@ -42,12 +42,8 @@ cinFile.close()
 isShiftString = ['_', 's', 'i']
 
 def input_init(event):
- global isModeChange
- global inputStatus
- global letters
- global addLetter
- global selectPage
- global ccIndex
+ global isModeChange, inputStatus, letters, addLetter, selectPage, \
+        ccIndex
  if 1 == math.fabs(inputStatus - 1):
   letters = ''
  if 2 != math.fabs(inputStatus + 1) or '' != addLetter or isModeChange > 0:
@@ -65,14 +61,8 @@ def display(displayString):
  sys.stdout.flush()
 
 def display_manage(event):
- global inputMode
- global isModeChange
- global letters
- global addletter
- global selectPage
- global inputStatus
- global isShift
- global isShiftString
+ global inputMode, isModeChange, letters, addletter, selectPage, \
+        inputStatus, isShift, isShiftString
  displayString = ''
  if inputMode > 0 and ('' !=  addLetter or inputStatus > -3 or \
     1 == isModeChange):
@@ -138,13 +128,8 @@ def match_cc(letters):
  return ccList
 
 def input_cc():
- global letters
- global ccIndex
- global inputStatus
- global isShift
- global isFirst
- global isUpper
- global originalPaste
+ global letters, ccIndex, inputStatus, isShift, isFirst, isUpper, \
+        originalPaste
  if 0 == inputStatus:
   pyperclip.copy(match_cc(letters)[ccIndex])
  elif 2 == inputStatus:
@@ -229,14 +214,8 @@ def input_manage(event):
    input_cc()
 
 def switch_grab(event):
- global inputMode
- global isModeChange
- global isShift
- global isFirst
- global letters
- global originalPaste
- global keyAppendHistory
- global maxKeyAppendHistory
+ global inputMode, isModeChange, isShift, isFirst, letters, \
+        originalPaste, keyAppendHistory, maxKeyAppendHistory
  if inputMode > 0 and 0 == keyAppendHistory:
   dev.grab()
   originalPaste = pyperclip.paste()
@@ -251,12 +230,8 @@ def switch_grab(event):
   isFirst = 2
 
 def switch_input_mode(event):
- global inputMode
- global isModeChange
- global isShift
- global keyAppendHistory
- global maxKeyAppendHistory
- global keyList
+ global inputMode, isModeChange, isShift, keyAppendHistory, \
+        maxKeyAppendHistory, keyList
  if 1 == event.keystate:
   keyList.append(event.keycode)
   keyAppendHistory += 1
