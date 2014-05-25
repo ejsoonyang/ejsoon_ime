@@ -170,18 +170,12 @@ def input_cc():
  newUI.syn()
 
 def input_manage(event):
- global inputMode
- global inputStatus
- global isFirst
- global isShift
- global isUpper
- global letters
- global addLetter
- global ccIndex
- global selectPage
+ global inputMode, inputStatus, isFirst, isShift, isUpper, \
+        letters, addLetter, ccIndex, selectPage
  if inputMode > 0:
   addLetter = keycode_to_letter(event)
-  if '' != addLetter:
+  if '' != addLetter and 1 != keyList.count('KEY_LEFTCTRL') and \
+     1 != keyList.count('KEY_LEFTSHIFT'):
    if (len(letters) < 5 or 2 == inputMode) and 1 == event.keystate:
     letters += addLetter
    else:
@@ -226,6 +220,8 @@ def input_manage(event):
    elif 'KEY_LEFTSHIFT' == event.keycode:
     if 1 == event.keystate:
      isUpper = 1
+    elif 0 == event.keystate:
+     isUpper = 0
    else:
     newUI.write(ecodes.EV_KEY, event.scancode, event.keystate)
     newUI.syn()
