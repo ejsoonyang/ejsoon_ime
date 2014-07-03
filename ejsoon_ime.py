@@ -20,6 +20,7 @@ maxKeyAppendHistory = 0
 originalPaste = ''
 
 letters = ''
+eLetters = ''
 addLetter = ''
 ccList = []
 ccIndex = -1
@@ -42,10 +43,11 @@ cinFile.close()
 isShiftString = ['_', 's', 'i']
 
 def input_init(event):
- global isModeChange, inputStatus, letters, addLetter, selectPage, \
-        ccIndex
+ global isModeChange, inputStatus, letters, eLetters, addLetter, \
+        selectPage, ccIndex
  if 1 == math.fabs(inputStatus - 1):
   letters = ''
+  eLetters = ''
  if 2 != math.fabs(inputStatus + 1) or '' != addLetter or isModeChange > 0:
   selectPage = 0
  isModeChange = 0
@@ -61,8 +63,8 @@ def display(displayString):
  sys.stdout.flush()
 
 def display_manage(event):
- global inputMode, isModeChange, letters, addletter, selectPage, \
-        inputStatus, isShift, isShiftString
+ global inputMode, isModeChange, letters, addletter, \
+        selectPage, inputStatus, isShift, isShiftString
  displayString = ''
  if inputMode > 0 and ('' !=  addLetter or inputStatus > -3 or \
     1 == isModeChange):
@@ -128,15 +130,15 @@ def match_cc(letters):
  return ccList
 
 def input_cc():
- global letters, ccIndex, inputStatus, isShift, isFirst, isUpper, \
-        originalPaste
+ global letters, eLetters, ccIndex, inputStatus, isShift, \
+        isFirst, isUpper, originalPaste
  if 0 == inputStatus:
   pyperclip.copy(match_cc(letters)[ccIndex])
  elif 2 == inputStatus:
   if 1 == isUpper:
-   letters = str.upper(letters)
+   eLetters = str.upper(eLetters)
    isUpper = 0
-  pyperclip.copy(letters)
+  pyperclip.copy(eLetters)
  if isFirst > 0:
   newUI.write(ecodes.EV_KEY, int(29 + (inputMode - 1 ) * 68), 0)
   newUI.write(ecodes.EV_KEY, int(42 + (inputMode - 1 ) * 12), 0)
@@ -156,25 +158,31 @@ def input_cc():
 
 def input_manage(event):
  global inputMode, inputStatus, isFirst, isShift, isUpper, \
-        letters, addLetter, ccIndex, selectPage
+        letters, eLetters, addLetter, ccIndex, selectPage
  if inputMode > 0:
   addLetter = keycode_to_letter(event)
   if '' != addLetter and 1 != keyList.count('KEY_LEFTCTRL') and \
-     1 != keyList.count('KEY_LEFTSHIFT'):
-   if (len(letters) < 5 or 2 == inputMode) and 1 == event.keystate:
-    letters += addLetter
-   else:
-    addLetter = ''
+     1 != keyList.count('KEY_LEFTSHIFT') and \
+     1 != keyList.count('KEY_LEFTALT'):
+   #if (len(letters) < 5 or 2 == inputMode) and 1 == event.keystate:
+   if 1 == event.keystate:
+    eLetters += addLetter
+    if len(letters) < 5:
+     letters += addLetter
+    else:
+     addLetter = ''
   elif '' == letters:
    newUI.write(ecodes.EV_KEY, event.scancode, event.keystate)
    newUI.syn()
   elif '' != letters:
    if 'KEY_ESC' == event.keycode and 1 == event.keystate:
     letters = ''
+    eLetters = ''
     inputStatus = -2
    elif 'KEY_BACKSPACE' == event.keycode:
     if 1 == event.keystate:
      letters = letters[0:-1]
+     eLetters = eLetters[0:-1]
      inputStatus = -1
    elif 'KEY_SPACE' == event.keycode:
     if 1 == event.keystate:
@@ -184,6 +192,8 @@ def input_manage(event):
      else:
       if 2 == inputMode:
        letters = ''
+       eLetters = ''
+       inputStatus = -2
       ccIndex = -1
    elif 1 == range(3, 6).count(event.scancode):
     ccIndex = event.scancode - 2 + 4 * selectPage
@@ -226,6 +236,7 @@ def switch_grab(event):
   isModeChange = 1
   maxKeyAppendHistory = 0
   letters = ''
+  eLetters = ''
   isShift = 0
   isFirst = 2
 
