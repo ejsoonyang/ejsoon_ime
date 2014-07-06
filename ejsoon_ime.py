@@ -1,3 +1,17 @@
+# coding=utf8
+# --------------------------------------------------
+# This is an OPEN SOURCE input method.
+#       ---GNU version 2.0---
+# Only a python script but evdev is needed.
+# Only for linux up to now(2014-7-6).
+# I guest that I am the first and the last user.
+# Who care? It is the BEST cj-ime for me!
+# --------------------------------------------------
+# Dependence:
+#   evdev (0.4.4 or newer)
+# --------------------------------------------------
+# ejsoon is a always-smiling guy.
+# --------------------------------------------------
 from evdev import InputDevice, list_devices, ecodes, categorize, UInput
 import math, sys
 import pyperclip
