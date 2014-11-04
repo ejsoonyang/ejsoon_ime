@@ -4,9 +4,9 @@
 #       ---GNU version 2.0---                       #
 # --------------------------------------------------#
 # Only a python script but evdev is needed.         #
-# Only for linux up to now(2014 9 9).               #
+# Only for linux up to now(2014 11 4).              #
 # Only I am the first and the last user.            #
-# It is really the BEST cangjie ime for me!         #
+# It is really the BEST CangJie ime for me!         #
 # --------------------------------------------------#
 # This project include a cin table, you can find    #
 # the original cj-ext.cin from this site:           #
@@ -16,10 +16,19 @@
 # --------------------------------------------------#
 # Dependence:                                       #
 #   python (2.x or 3.x)                             #
-#   evdev (0.4.4 or newer)                          #
 #   pyperclip (1.5.4 or newer)                      #
+#   evdev (0.4.4 or newer)                          #
 # --------------------------------------------------#
-# ejsoon is a always smiling guy.                   #
+# In the Ubuntu12.04 or newer,you can do like:      #
+# Download pyperclip.py from:                       #
+#   https://pypi.python.org/pypi/pyperclip          #
+# Unzip and move it to python module folder:        #
+#   sudo mv pyperclip.py /usr/lib/python3.4         #
+# And then install evdev:                           #
+#   sudo apt-get install python3-evdev              #
+# Then go to the ejsoon_ime.py folder, do this:     #
+#   sudo python3.4 ejsoon_ime.py                    #
+# Have fun and smile.                               #
 # --------------------------------------------------#
 from evdev import InputDevice, list_devices, ecodes, categorize, UInput
 import math, sys
