@@ -12,12 +12,12 @@
 # the original cj-ext.cin from this site:           #
 #   "https://github.com/yahoo/KeyKey/blob/master/   #
 #    YahooKeyKey-Source-1.1.2528/DataTables/"       #
-# But to be used you need to delect no need lines.  #
+# But it's enough to use the table already provided.#
 # --------------------------------------------------#
 # Dependence:                                       #
 #   python (2.x or 3.x)                             #
 #   evdev (0.4.4 or newer)                          #
-#   pyperclip (1.5.4 or newer)                          #
+#   pyperclip (1.5.4 or newer)                      #
 # --------------------------------------------------#
 # ejsoon is a always smiling guy.                   #
 # --------------------------------------------------#
