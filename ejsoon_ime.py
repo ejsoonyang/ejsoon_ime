@@ -4,7 +4,7 @@
 #       ---GNU version 2.0---                       #
 # --------------------------------------------------#
 # Only a python script but evdev is needed.         #
-# Only for linux up to now(2014 11 4).              #
+# Only for linux gnome up to now(2015 12 5).        #
 # Only I am the first and the last user.            #
 # It is really the BEST CangJie ime for me!         #
 # --------------------------------------------------#
@@ -12,7 +12,7 @@
 # the original cj-ext.cin from this site:           #
 #   "https://github.com/yahoo/KeyKey/blob/master/   #
 #    YahooKeyKey-Source-1.1.2528/DataTables/"       #
-# But it's enough to use the table already provided.#
+# But the table must be sorted as the provided one. #
 # --------------------------------------------------#
 # Dependence:                                       #
 #   python (2.x or 3.x)                             #
@@ -22,13 +22,16 @@
 # In the Ubuntu12.04 or newer,you can do like:      #
 # Download pyperclip.py from:                       #
 #   https://pypi.python.org/pypi/pyperclip          #
-# Unzip and move it to python module folder:        #
-#   sudo mv pyperclip.py /usr/lib/python3.4         #
+# Then install it by python setuptools.             #
 # And then install evdev:                           #
 #   sudo apt-get install python3-evdev              #
-# Then go to the ejsoon_ime.py folder, do this:     #
+# Go to the ejsoon_ime.py folder, do this:          #
 #   sudo python3.4 ejsoon_ime.py                    #
 # Have fun and smile.                               #
+# --------------------------------------------------#
+# {Ctrl} + {space} = start / stop                   #
+# left{Alt} = terminal input mode                   #
+# {Ctrl} + {z} = quit (DO NOT QUIT BEFORE STOP!!)   #
 # --------------------------------------------------#
 from evdev import InputDevice, list_devices, ecodes, categorize, UInput
 import math, sys
@@ -61,7 +64,7 @@ newUI = UInput()
 
 lArray = []
 ccArray = []
-cinFile = open('cj-ext.cin', 'r')
+cinFile = open('yahooCJ.cin', 'r')
 for readLine in cinFile:
  if 2 == len(readLine.split()):
   lArray.append(readLine.split()[0])
