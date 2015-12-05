@@ -24,9 +24,9 @@
 #   https://pypi.python.org/pypi/pyperclip          #
 # Then install it by python setuptools.             #
 # And then install evdev:                           #
-#   sudo apt-get install python3-evdev              #
+#   sudo apt-get install python-evdev               #
 # Go to the ejsoon_ime.py folder, do this:          #
-#   sudo python3.4 ejsoon_ime.py                    #
+#   sudo python ejsoon_ime.py                       #
 # Have fun and smile.                               #
 # --------------------------------------------------#
 # {Ctrl} + {space} = start / stop                   #
